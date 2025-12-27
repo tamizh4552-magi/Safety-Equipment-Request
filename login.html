@@ -65,7 +65,7 @@ function login() {
     return;
   }
 
-  fetch("PASTE_YOUR_WEB_APP_URL_HERE", {
+  fetch("https://script.google.com/macros/s/AKfycbygk31CuH6MGFSbG2FB1eEilJ4KcLGjt4joJiqyBwlauVC8poEbWApQhVG-7JK5jyc/exec", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, userId })
@@ -88,4 +88,5 @@ function login() {
 
 </body>
 </html>
+
 
