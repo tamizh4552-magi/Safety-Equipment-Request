@@ -113,52 +113,32 @@ function login() {
   const userId = document.getElementById("userId").value.trim();
   const msg = document.getElementById("msg");
 
-  msg.innerHTML = "";
-
   if (!name || !userId) {
-    msg.innerHTML = "<span class='error'>Enter all fields</span>";
+    msg.innerHTML = "<span style='color:red'>Enter all fields</span>";
     return;
   }
 
   msg.innerHTML = "Checking...";
 
-  fetch("https://script.google.com/macros/s/AKfycbygk31CuH6MGFSbG2FB1eEilJ4KcLGjt4joJiqyBwlauVC8poEbWApQhVG-7JK5jyc/exec", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ name, userId })
-  })
-  .then(res => {
-    if (!res.ok) {
-      throw new Error("HTTP Error: " + res.status);
-    }
-    return res.text(); // get raw text first
-  })
-  .then(text => {
-    try {
-      const data = JSON.parse(text);
-
+  fetch(`https://script.google.com/macros/s/AKfycbygk31CuH6MGFSbG2FB1eEilJ4KcLGjt4joJiqyBwlauVC8poEbWApQhVG-7JK5jyc/exec?name=${encodeURIComponent(name)}&userId=${encodeURIComponent(userId)}`)
+    .then(res => res.json())
+    .then(data => {
       if (data.status === "success") {
-        msg.innerHTML = "<span class='success'>Login success</span>";
         sessionStorage.setItem("name", data.name);
         sessionStorage.setItem("role", data.role);
-        setTimeout(() => {
-          window.location.href = "dashboard.html";
-        }, 800);
+        window.location.href = "dashboard.html";
       } else {
-        msg.innerHTML = "<span class='error'>" + (data.message || "Invalid Login") + "</span>";
+        msg.innerHTML = "<span style='color:red'>Invalid Login</span>";
       }
-    } catch (e) {
-      msg.innerHTML = "<span class='error'>Invalid server response</span><br><small>" + text + "</small>";
-    }
-  })
-  .catch(err => {
-    msg.innerHTML = "<span class='error'>Server error: " + err.message + "</span>";
-  });
+    })
+    .catch(err => {
+      msg.innerHTML = "<span style='color:red'>Server error</span>";
+      console.error(err);
+    });
 }
 </script>
 
 </body>
 </html>
+
 
