@@ -75,7 +75,7 @@ function login() {
     if (data.status === "success") {
       sessionStorage.setItem("name", data.name);
       sessionStorage.setItem("role", data.role);
-      window.location.href = "index.html";
+      window.location.href = "dashboard.html";
     } else {
       msg.innerHTML = "<span style='color:red'>Invalid Login</span>";
     }
@@ -88,3 +88,4 @@ function login() {
 
 </body>
 </html>
+
