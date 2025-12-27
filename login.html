@@ -5,39 +5,92 @@
   <title>Login</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial;
+      font-family: "Segoe UI", Arial, sans-serif;
       background: linear-gradient(135deg, #74b9ff, #6c5ce7);
       height: 100vh;
+      margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0;
     }
+
     .login-box {
-      width: 320px;
-      background: #fff;
-      padding: 25px;
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 340px;
+      background: #ffffff;
+      padding: 30px 25px;
+      border-radius: 10px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+      animation: fadeIn 0.4s ease-in-out;
     }
+
     h3 {
       text-align: center;
+      margin-bottom: 20px;
+      color: #2f3640;
     }
-    input, button {
+
+    input {
       width: 100%;
-      padding: 10px;
-      margin-top: 10px;
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
     }
+
+    input:focus {
+      outline: none;
+      border-color: #6c5ce7;
+      box-shadow: 0 0 0 2px rgba(108,92,231,0.25);
+    }
+
     button {
-      background: #2f3640;
+      width: 100%;
+      padding: 12px;
+      margin-top: 18px;
+      background: linear-gradient(135deg, #2f3640, #1e272e);
       color: #fff;
       border: none;
+      border-radius: 6px;
+      font-size: 15px;
       cursor: pointer;
+      transition: all 0.2s ease;
     }
+
+    button:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
     #msg {
-      margin-top: 10px;
+      margin-top: 15px;
       text-align: center;
+      font-size: 14px;
+      min-height: 18px;
+    }
+
+    .error {
+      color: #d63031;
+    }
+
+    .success {
+      color: #00b894;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -60,33 +113,51 @@ function login() {
   const userId = document.getElementById("userId").value.trim();
   const msg = document.getElementById("msg");
 
+  msg.innerHTML = "";
+
   if (!name || !userId) {
-    msg.innerHTML = "<span style='color:red'>Enter all fields</span>";
+    msg.innerHTML = "<span class='error'>Enter all fields</span>";
     return;
   }
 
+  msg.innerHTML = "Checking...";
+
   fetch("https://script.google.com/macros/s/AKfycbygk31CuH6MGFSbG2FB1eEilJ4KcLGjt4joJiqyBwlauVC8poEbWApQhVG-7JK5jyc/exec", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({ name, userId })
   })
-  .then(res => res.json())
-  .then(data => {
-    if (data.status === "success") {
-      sessionStorage.setItem("name", data.name);
-      sessionStorage.setItem("role", data.role);
-      window.location.href = "dashboard.html";
-    } else {
-      msg.innerHTML = "<span style='color:red'>Invalid Login</span>";
+  .then(res => {
+    if (!res.ok) {
+      throw new Error("HTTP Error: " + res.status);
+    }
+    return res.text(); // get raw text first
+  })
+  .then(text => {
+    try {
+      const data = JSON.parse(text);
+
+      if (data.status === "success") {
+        msg.innerHTML = "<span class='success'>Login success</span>";
+        sessionStorage.setItem("name", data.name);
+        sessionStorage.setItem("role", data.role);
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 800);
+      } else {
+        msg.innerHTML = "<span class='error'>" + (data.message || "Invalid Login") + "</span>";
+      }
+    } catch (e) {
+      msg.innerHTML = "<span class='error'>Invalid server response</span><br><small>" + text + "</small>";
     }
   })
-  .catch(() => {
-    msg.innerHTML = "<span style='color:red'>Server error</span>";
+  .catch(err => {
+    msg.innerHTML = "<span class='error'>Server error: " + err.message + "</span>";
   });
 }
 </script>
 
 </body>
 </html>
-
-
