@@ -1,151 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
-      font-family: "Segoe UI", Arial, sans-serif;
+      font-family: Arial;
       background: linear-gradient(135deg, #74b9ff, #6c5ce7);
-      min-height: 100vh;
-      margin: 0;
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin: 0;
     }
-
     .login-box {
-      width: 100%;
-      max-width: 360px;
-      background: #ffffff;
-      padding: 30px 25px;
-      border-radius: 10px;
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-      animation: fadeIn 0.5s ease-in-out;
+      width: 320px;
+      background: #fff;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
-
-    .login-box h3 {
+    h3 {
       text-align: center;
-      margin-bottom: 20px;
-      color: #2f3640;
-      font-size: 22px;
     }
-
-    input {
+    input, button {
       width: 100%;
-      padding: 12px 14px;
-      margin-top: 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
-      transition: border-color 0.3s, box-shadow 0.3s;
+      padding: 10px;
+      margin-top: 10px;
     }
-
-    input:focus {
-      outline: none;
-      border-color: #6c5ce7;
-      box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
-    }
-
     button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 18px;
-      background: linear-gradient(135deg, #6c5ce7, #341f97);
-      color: #ffffff;
+      background: #2f3640;
+      color: #fff;
       border: none;
-      border-radius: 6px;
-      font-size: 15px;
-      font-weight: 600;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
     }
-
-    button:hover {
-      opacity: 0.95;
-      transform: translateY(-1px);
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    button:active {
-      transform: translateY(0);
-      box-shadow: none;
-    }
-
     #msg {
-      margin-top: 12px;
+      margin-top: 10px;
       text-align: center;
-      font-size: 14px;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(15px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="login-box">
-    <h3>User Login</h3>
+<div class="login-box">
+  <h3>User Login</h3>
 
-    <input type="text" id="name" placeholder="Name">
-    <input type="text" id="userId" placeholder="User ID">
+  <input type="text" id="name" placeholder="Name">
+  <input type="text" id="userId" placeholder="User ID">
 
-    <button onclick="login()">Login</button>
-    <div id="msg"></div>
-  </div>
+  <button onclick="login()">Login</button>
+  <div id="msg"></div>
+</div>
 
-  <script>
-    function login() {
-      const name = document.getElementById("name").value.trim();
-      const userId = document.getElementById("userId").value.trim();
-      const msg = document.getElementById("msg");
+<script>
+function login() {
+  const name = document.getElementById("name").value.trim();
+  const userId = document.getElementById("userId").value.trim();
+  const msg = document.getElementById("msg");
 
-      if (!name || !userId) {
-        msg.innerHTML = "<span style='color:red'>Please enter all fields</span>";
-        return;
-      }
+  if (!name || !userId) {
+    msg.innerHTML = "<span style='color:red'>Enter all fields</span>";
+    return;
+  }
 
-      msg.innerHTML = "Checking...";
-
-      fetch("PASTE_YOUR_WEB_APP_URL_HERE", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ name, userId })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === "success") {
-          sessionStorage.setItem("name", data.name);
-          sessionStorage.setItem("userId", data.userId);
-          sessionStorage.setItem("role", data.role || "");
-
-          window.location.href = "dashboard.html";
-        } else {
-          msg.innerHTML = "<span style='color:red'>Invalid Login</span>";
-        }
-      })
-      .catch(err => {
-        msg.innerHTML = "<span style='color:red'>Server Error</span>";
-        console.error(err);
-      });
+  fetch("PASTE_YOUR_WEB_APP_URL_HERE", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, userId })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === "success") {
+      sessionStorage.setItem("name", data.name);
+      sessionStorage.setItem("role", data.role);
+      window.location.href = "index.html";
+    } else {
+      msg.innerHTML = "<span style='color:red'>Invalid Login</span>";
     }
-  </script>
+  })
+  .catch(() => {
+    msg.innerHTML = "<span style='color:red'>Server error</span>";
+  });
+}
+</script>
 
 </body>
 </html>
