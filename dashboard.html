@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+</head>
+<body>
+
+<script>
+  if (!sessionStorage.getItem("name")) {
+    window.location.href = "login.html";
+  }
+</script>
+
+<h2>Welcome, <script>document.write(sessionStorage.getItem("name"))</script></h2>
+<p>Role: <script>document.write(sessionStorage.getItem("role"))</script></p>
+
+<a href="logout.html">Logout</a>
+
+</body>
+</html>
