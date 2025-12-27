@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <meta charset="UTF-8">
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f2f2f2;
+    }
+    .login-box {
+      width: 300px;
+      margin: 120px auto;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px #ccc;
+      border-radius: 5px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    button {
+      background: #2f3640;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #353b48;
+    }
+    #msg {
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-box">
+  <h3>Login</h3>
+
+  <input type="text" id="name" placeholder="Name">
+  <input type="text" id="userId" placeholder="User ID">
+
+  <button onclick="login()">Login</button>
+  <div id="msg"></div>
+</div>
+
+<script>
+function login() {
+  const name = document.getElementById("name").value;
+  const userId = document.getElementById("userId").value;
+
+  fetch("PASTE_YOUR_WEB_APP_URL_HERE", {
+    method: "POST",
+    body: JSON.stringify({ name, userId })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === "success") {
+      sessionStorage.setItem("name", data.name);
+      sessionStorage.setItem("userId", data.userId);
+      window.location.href = "dashboard.html";
+    } else {
+      document.getElementById("msg").innerHTML =
+        "<span style='color:red'>Invalid Login</span>";
+    }
+  });
+}
+</script>
+
+</body>
+</html>
