@@ -120,7 +120,7 @@ function login() {
 
   msg.innerHTML = "Checking...";
 
-  fetch(`https://script.google.com/macros/s/AKfycbygk31CuH6MGFSbG2FB1eEilJ4KcLGjt4joJiqyBwlauVC8poEbWApQhVG-7JK5jyc/exec?name=${encodeURIComponent(name)}&userId=${encodeURIComponent(userId)}`)
+  fetch(`https://script.google.com/macros/s/AKfycbygk31CuH6MGFSbG2FB1eEilJ4KcLGjt4joJiqyBwlauVC8poEbWApQhVG-7JK5jyc/exec??name=Tamil&userId=U427367`)
     .then(res => res.json())
     .then(data => {
       if (data.status === "success") {
@@ -140,5 +140,6 @@ function login() {
 
 </body>
 </html>
+
 
 
